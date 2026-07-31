@@ -5,7 +5,7 @@ namespace BrOptim
 {
 
 MyModel::MyModel()
-:params(1)
+:params(2)
 {
 
 }
@@ -13,27 +13,38 @@ MyModel::MyModel()
 void MyModel::from_prior(DNest4::RNG& rng)
 {
     params[0] = -10.0 + 20.0*rng.rand();
+    params[1] = rng.rand(); // This mimics noise
 }
 
 double MyModel::perturb(DNest4::RNG& rng)
 {
     double logH = 0.0;
 
-    params[0] += 20.0*rng.randh();
-    DNest4::wrap(params[0], -10.0, 10.0);
+    int which = rng.rand_int(2);
+
+    if(which == 0)
+    {
+        params[0] += 20.0*rng.randh();
+        DNest4::wrap(params[0], -10.0, 10.0);
+    }
+    else
+    {
+        params[1] += rng.randh();
+        DNest4::wrap(params[1], 0.0, 1.0);
+    }
 
     return logH;
 }
 
 double MyModel::objective_function() const
 {
-    return -0.5*pow(params[0], 2);
+    return -0.5*pow(params[0], 2) + log(params[1]);
 }
 
 
 void MyModel::print(std::ostream& out)
 {
-    out << params[0];
+    out << params[0] << ' ' << params[1];
 }
 
 

@@ -8,7 +8,7 @@ int main()
     DNest4::RNG rng(time(0));
     BrOptim::Optimiser<BrOptim::MyModel> optimiser(rng);
 
-    for(int i=0; i<10000; ++i)
+    for(int i=0; i<100000; ++i)
         optimiser.update(rng);
 
     return 0;

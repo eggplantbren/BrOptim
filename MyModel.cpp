@@ -38,7 +38,7 @@ double MyModel::perturb(DNest4::RNG& rng)
 
 double MyModel::objective_function() const
 {
-    return -0.5*pow(params[0], 2) + log(params[1]);
+    return -0.5*pow(params[0], 2) + 100.0*(params[1] - 0.5);
 }
 
 
